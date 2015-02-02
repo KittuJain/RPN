@@ -1,0 +1,6 @@
+*.o
+*.exe
+*.sh
+sampleTest.c
+sampleTestRunner.c
+rpnTestRunner.c
