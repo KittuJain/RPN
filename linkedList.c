@@ -17,7 +17,7 @@ Node_ptr create_node(void *data){
 }
 
 int add_to_list(LinkedList* list,Node_ptr node){
-	if(list->head == NULL){
+	if(list->head == NULL || list->tail == NULL){
 		list->head = node;
 		list->tail = node;
 	}
