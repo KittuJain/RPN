@@ -25,8 +25,13 @@ void test_isOperand_returns_0_for_other_values (){
 }
 
 void test_toInteger_converts_char_to_Int (){
-	char number = '1';
+	STRING number = "1";
 	assertEqual(toInteger(number), 1);
+}
+
+void test_toInteger_converts_string_to_Int (){
+	STRING number = "123";
+	assertEqual(toInteger(number), 123);
 }
 
 void test_operate_performs_add_if_given_two_operands_and_a_plus_sign (){
@@ -46,26 +51,27 @@ void test_operate_performs_add_if_given_two_operands_and_a_divide_sign (){
 }
 
 void test_createToken_creates_an_empty_token (){
-	Token token = createToken();
-	assertEqual(token.type, 0);
-	assertEqual(token.start_point, 0);
-	assertEqual(token.end_point, 0);
+	Token* token = createToken(0,0,0);
+	assertEqual(token->type, 0);
+	assertEqual(token->start_point, 0);
+	assertEqual(token->end_point, 0);
 }
 
-void test_createNode_creates_node_of_Token_type (){
-	Token token = createToken();
-	Node* tokenNode = create_node(&token);
-	assertEqual(((Token*)(tokenNode->data))->type, token.type);
-	assertEqual(((Token*)(tokenNode->data))->start_point, token.start_point);
-	assertEqual(((Token*)(tokenNode->data))->end_point, token.end_point);
+void test_getValue_gives_value_between_two_positions (){
+	STRING value = getValue("2 3 +", 0, 0);
+	assertEqual(strcmp(value, "2"), 0);
 }
 
-void test_add_to_list_adds_the_given_TokenNode_in_the_list (){
-	LinkedList list = createList();
-	Token token = createToken();
-	Node* tokenNode = create_node(&token);
-	int result = add_to_list(&list,tokenNode);
-	assert(list.head==tokenNode);
-	assert(list.tail==tokenNode);
-	assertEqual(list.count, 1);
+void test_populateListWithToken_gives_the_linked_list_of_tokens_in_the_given_string(){
+	LinkedList *list;
+	list = populateListWithToken("2 3 +");
+	assertEqual(list->count,5);
+	assertEqual(((Token*)list->head->data)->type,1);
+	assertEqual(((Token*)list->tail->data)->type,2);
 }
+
+// void test_evaluate_evals_the_result_of_1_1_sum_as_2 (){
+// 	String expression = calloc(sizeof(String),1);
+// 	strcpy(expression,"1 1 +");
+// 	assertEqual(evaluate(expression), 2);
+// }
