@@ -1,10 +1,17 @@
 #include "stack.h"
-#define String char*
+#define STRING char*
 #define INT_SIZE sizeof(int)
+typedef struct token Token;
 
-int toInteger (char);
-int add (int, int);
-int sub (int, int);
-int mul (int, int);
-int divide (int, int);
-int evaluate(char *expression);
+int isOperator(char);
+int isOperand(char);
+int toInteger(char);
+int operate(int, int, char);
+
+struct token{
+	int type;
+	int start_point;
+	int end_point;
+};
+
+Token createToken();
