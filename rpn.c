@@ -30,9 +30,10 @@ int toInteger (STRING expression){
 	return number;
 }
 
-STRING getValue (STRING expression, int start, int end){
+STRING getValue (STRING expression, int start, int end, Token *token){
 	int i, count = 0 ;
 	STRING value;
+	value = malloc( sizeof(char)* (token->end_point - token->start_point));
 	for(i = start; i <= end; i++){
 		value[count] = expression[i];
 		count++;
@@ -90,4 +91,33 @@ LinkedList* populateListWithToken (STRING expression){
 		add_to_list(list,*tokenNode);
 	}
 	return list;
+}
+
+int evaluate (STRING expression){
+	Stack stack = createStack();
+	Token *token;
+	int value, *result, num1, num2;
+	char symbol;
+	LinkedList *list = populateListWithToken(expression);
+	Node_ptr walker = list->head;
+
+	while(walker != NULL){
+		token = ((Token*)(walker->data));
+
+		if(token -> type == 1){
+			value = toInteger(getValue(expression, token->start_point, token->end_point,token));
+			push(&stack, &value);
+		}
+		if(token->type == 2){
+			symbol = getSymbol(expression, token->start_point);
+			result = (int*)calloc(INT_SIZE, 1);
+			num1 = *(int*)pop(&stack);
+			num2 = *(int*)pop(&stack);
+			*result = operate(num1,num2, symbol);
+			push(&stack, result);
+		}
+		walker = walker->next;
+	}
+	return *(int*)pop(&stack);
+
 }

@@ -57,11 +57,6 @@ void test_createToken_creates_an_empty_token (){
 	assertEqual(token->end_point, 0);
 }
 
-void test_getValue_gives_value_between_two_positions (){
-	STRING value = getValue("2 3 +", 0, 0);
-	assertEqual(strcmp(value, "2"), 0);
-}
-
 void test_populateListWithToken_gives_the_linked_list_of_tokens_in_the_given_string(){
 	LinkedList *list;
 	list = populateListWithToken("2 3 +");
@@ -70,8 +65,14 @@ void test_populateListWithToken_gives_the_linked_list_of_tokens_in_the_given_str
 	assertEqual(((Token*)list->tail->data)->type,2);
 }
 
-// void test_evaluate_evals_the_result_of_1_1_sum_as_2 (){
-// 	String expression = calloc(sizeof(String),1);
-// 	strcpy(expression,"1 1 +");
-// 	assertEqual(evaluate(expression), 2);
-// }
+void test_evaluate_evals_the_result_of_1_1_sum_as_2 (){
+	String expression = calloc(sizeof(String),1);
+	strcpy(expression,"1 1 +");
+	assertEqual(evaluate(expression), 2);
+}
+
+void test_evaluate_evals_the_result_of_3_3_sum_as_6 (){
+	String expression = calloc(sizeof(String),1);
+	strcpy(expression,"3 3 +");
+	assertEqual(evaluate(expression), 6);
+}

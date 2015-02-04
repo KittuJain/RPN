@@ -20,4 +20,3 @@ void* pop (Stack *stack){
 	int count = stack->list->count;
 	return (count == 0) ? (void*)(-1) : deleteElementAt(stack->list, count - 1);
 }
-
