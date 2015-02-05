@@ -140,7 +140,3 @@ void test_evaluate_evals_the_result_of_postfix_operation_when_operators_are_betw
 	assertEqual(evaluate("2 2 2 2 2 * * 2 + + 2 - *").status,20);
 	assertEqual(evaluate("2 2 - 2 2 2 * 2 - - -").status,0);
 }
-
-// void test_evaluate_returns_error_for_less_operands_or_operators (){
-// 	assertEqual(evaluate("2 +").error,1);
-// }

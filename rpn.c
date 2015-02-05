@@ -4,38 +4,34 @@
 #include <string.h>
 
 int isOperator(char symbol){
-	if(symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/')
-		return 1;
-	return 0;
+	return (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/') ? 1 : 0;
 }
 
 int isOperand (char number){
-	if(number> 47 && number < 58)
-		return 1;
-	return 0;
+	return (number > 47 && number < 58) ? 1 : 0;
 }
 
 int isSpace (char ch){
-	if(ch == 32)
-		return 1;
-	return 0;
+	return (ch == 32) ? 1 : 0;
 }
 
 int toInteger (STRING expression){
-	int i, number = 0;
-	for(i = 0; i < strlen(expression); i++ ){
+	int i = 0, number = 0;
+	while(i < strlen(expression)){
 		number = number*10 + (expression[i] - 48);
+		i++;
 	}
 	return number;
 }
 
 STRING getValue (STRING expression, int start, int end, Token *token){
-	int i, count = 0 ;
+	int i = start, count = 0 ;
 	STRING value;
 	value = malloc(STRING_SIZE * (token->end_point - token->start_point));
-	for(i = start; i <= end; i++){
+	while(i <= end){
 		value[count] = expression[i];
 		count++;
+		i++;
 	}
 	return value;
 }
@@ -50,7 +46,7 @@ int operate(int num1, int num2, char operator){
 		case '-' : return num1 - num2;
 		case '*' : return num1 * num2;
 		case '/' : return num1 / num2;
-		default : return -1;
+		default  : return -1;
 	}
 }
 
@@ -80,6 +76,7 @@ LinkedList* populateListWithToken (STRING expression){
 				count++;
 			token = createToken(1,start,count);
 		}
+
 		else
 			token = createToken(3,count,count);
 
