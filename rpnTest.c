@@ -39,7 +39,7 @@ void test_operate_performs_add_if_given_two_operands_and_a_plus_sign (){
 }
 
 void test_operate_performs_add_if_given_two_operands_and_a_minus_sign (){
-	assertEqual(operate(24,56,'-'), 32);
+	assertEqual(operate(56,24,'-'), 32);
 }
 
 void test_operate_performs_add_if_given_two_operands_and_a_multiply_sign (){
@@ -47,7 +47,7 @@ void test_operate_performs_add_if_given_two_operands_and_a_multiply_sign (){
 }
 
 void test_operate_performs_add_if_given_two_operands_and_a_divide_sign (){
-	assertEqual(operate(4,12,'/'), 3);
+	assertEqual(operate(12,4,'/'), 3);
 }
 
 void test_createToken_creates_an_empty_token (){
@@ -118,15 +118,15 @@ void test_evaluate_evals_the_result_of_2_3_4_sum_diff_as_minus_5 (){
 	assertEqual(evaluate(expression).status, -5);
 }
 
-void test_evaluate_works_fine_with_numbers_not_separated_by_spaces (){
+void test_evaluate_works_fine_with_operators_not_separated_by_spaces (){
 	assertEqual(evaluate("5 4+").status,9);
+	assertEqual(evaluate("5 4 3+-").status,-2);
 }
-
 
 void test_evaluate_evals_the_result_of_postfix_operation_for_multiple_operators (){
 	assertEqual(evaluate("2 4 6 + *").status,20);
 	assertEqual(evaluate("5 4 6 5 + + -").status,-10);
-	assertEqual(evaluate("5 4 6 5 8 2 + + + ++").status,30);
+	assertEqual(evaluate("5 4 6 5 8 2 + + + + +").status,30);
 }
 
 void test_evaluate_evals_the_result_of_postfix_operation_for_multi_digit_operands (){
@@ -134,9 +134,13 @@ void test_evaluate_evals_the_result_of_postfix_operation_for_multi_digit_operand
 	assertEqual(evaluate("20000 400 +").status,20400);
 }
 
-void test_evaluate_evals_the_result_of_postfix_operation_when_operators_are_between_numbers (){
+void test_evaluate_evals_the_result_of_postfix_operation_when_operators_are_between_operands (){
 	assertEqual(evaluate("2 4 * 2 +").status,10);
-	assert(evaluate("2 2 2 * 2 - 3 + +  == 7").status);
-	assert(evaluate("2 2 2 2 2 * * 2 + + 2 - * == 20").status);
+	assertEqual(evaluate("2 2 2 * 2 - 3 + +").status, 7);
+	assertEqual(evaluate("2 2 2 2 2 * * 2 + + 2 - *").status,20);
 	assertEqual(evaluate("2 2 - 2 2 2 * 2 - - -").status,0);
 }
+
+// void test_evaluate_returns_error_for_less_operands_or_operators (){
+// 	assertEqual(evaluate("2 +").error,1);
+// }

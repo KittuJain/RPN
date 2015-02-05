@@ -46,10 +46,10 @@ char getSymbol (STRING expression, int start){
 
 int operate(int num1, int num2, char operator){
 	switch(operator){
-		case '+' : return num2 + num1;
-		case '-' : return num2 - num1;
-		case '*' : return num2 * num1;
-		case '/' : return num2 / num1;
+		case '+' : return num1 + num2;
+		case '-' : return num1 - num2;
+		case '*' : return num1 * num2;
+		case '/' : return num1 / num2;
 		default : return -1;
 	}
 }
@@ -69,7 +69,7 @@ LinkedList* populateListWithToken (STRING expression){
 	Node_ptr* tokenNode;
 	Token* token;
 
-	for(count=0,length= strlen(expression) ; count<length ; count++){
+	for(count = 0, length = strlen(expression) ; count < length ; count++){
 
 		if(isOperator(expression[count]))
 			token = createToken(2,count,count);
@@ -90,15 +90,10 @@ LinkedList* populateListWithToken (STRING expression){
 	return list;
 }
 
-Result evaluate (STRING expression){
-	Stack stack = createStack();
-	Token *token;
-	int *value, *calculatedResult, num1, num2;
+Result generateResult (Node_ptr walker, Stack stack, STRING expression, Token *token){
+	int *value, *calculatedResult;
 	char symbol;
-	LinkedList *list = populateListWithToken(expression);
-	Node_ptr walker = list->head;
 	Result result = {0,0};
-
 	while(walker != NULL){
 		token = ((Token*)(walker->data));
 
@@ -106,18 +101,26 @@ Result evaluate (STRING expression){
 			value = malloc(INT_SIZE);
 			*value = toInteger(getValue(expression, token->start_point, token->end_point, token));
 			push(&stack, value);
-
 		}
-		if(token->type == 2){
+
+		if(token -> type == 2){
 			symbol = getSymbol(expression, token->start_point);
 			calculatedResult = (int*)calloc(INT_SIZE, 1);
-			num1 = *(int*)pop(&stack);
-			num2 = *(int*)pop(&stack);
-			*calculatedResult = operate(num1,num2, symbol);
+			*calculatedResult = operate(*(int*)pop(&stack), *(int*)pop(&stack), symbol);
 			push(&stack, calculatedResult);
 		}
+
 		walker = walker->next;
 	}
+	return result;
+}
+
+Result evaluate (STRING expression){
+	Token *token;
+	Stack stack = createStack();
+	LinkedList *list = populateListWithToken(expression);
+	Node_ptr walker = list->head;
+	Result result = generateResult(walker, stack, expression, token);
 	result.status = *(int*)pop(&stack);
 	return result;
 }

@@ -15,6 +15,7 @@ STRING getValue(STRING, int, int, Token*);
 char getSymbol (STRING, int);
 Token* createToken(int, int, int);
 LinkedList* populateListWithToken (STRING);
+Result generateResult (Node_ptr, Stack, STRING, Token*);
 
 struct token{
 	int type;
