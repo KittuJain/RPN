@@ -10,7 +10,7 @@ int isOperand(char);
 int toInteger(STRING);
 int isSpace(char);
 int operate(int, int, char);
-int evaluate(STRING);
+Result evaluate(STRING);
 STRING getValue(STRING, int, int, Token*);
 char getSymbol (STRING, int);
 Token* createToken(int, int, int);

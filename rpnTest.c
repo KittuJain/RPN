@@ -74,47 +74,69 @@ void test_getValue_gets_the_value_between_two_points (){
 void test_evaluate_evals_the_result_of_1_1_sum_as_2 (){
 	String expression = calloc(STRING_SIZE,1);
 	strcpy(expression,"1 1 +");
-	assertEqual(evaluate(expression), 2);
+	assertEqual(evaluate(expression).status, 2);
 }
 
 void test_evaluate_evals_the_result_of_3_3_sum_as_6 (){
 	String expression = calloc(STRING_SIZE,1);
 	strcpy(expression,"3 3 +");
-	assertEqual(evaluate(expression), 6);
+	assertEqual(evaluate(expression).status, 6);
 }
 
 void test_evaluate_evals_the_result_of_3_2_sum_as_5 (){
 	String expression = calloc(STRING_SIZE,1);
 	strcpy(expression,"3 2 +");
-	assertEqual(evaluate(expression), 5);
+	assertEqual(evaluate(expression).status, 5);
 }
 
 void test_evaluate_evals_the_result_of_2_3_sum_as_5 (){
 	String expression = calloc(STRING_SIZE,1);
 	strcpy(expression,"2 3 +");
-	assertEqual(evaluate(expression), 5);
+	assertEqual(evaluate(expression).status, 5);
 }
 
 void test_evaluate_evals_the_result_of_difference_between_2_3_as_minus_1 (){
 	String expression = calloc(STRING_SIZE,1);
 	strcpy(expression,"2 3 -");
-	assertEqual(evaluate(expression), -1);
+	assertEqual(evaluate(expression).status, -1);
 }
 
 void test_evaluate_evals_the_result_of_product_of_2_3_as_6 (){
 	String expression = calloc(STRING_SIZE,1);
 	strcpy(expression,"2 3 *");
-	assertEqual(evaluate(expression), 6);
+	assertEqual(evaluate(expression).status, 6);
 }
 void test_evaluate_evals_the_result_of_division_of_2_3_as_0 (){
 	String expression = calloc(STRING_SIZE,1);
 	strcpy(expression,"2 3 /");
-	assertEqual(evaluate(expression), 0);
+	assertEqual(evaluate(expression).status, 0);
 }
 
 void test_evaluate_evals_the_result_of_2_3_4_sum_diff_as_minus_5 (){
 	String expression = calloc(STRING_SIZE,1);
 	strcpy(expression,"2 3 4 + -");
-	assertEqual(evaluate(expression), -5);
+	assertEqual(evaluate(expression).status, -5);
 }
 
+void test_evaluate_works_fine_with_numbers_not_separated_by_spaces (){
+	assertEqual(evaluate("5 4+").status,9);
+}
+
+
+void test_evaluate_evals_the_result_of_postfix_operation_for_multiple_operators (){
+	assertEqual(evaluate("2 4 6 + *").status,20);
+	assertEqual(evaluate("5 4 6 5 + + -").status,-10);
+	assertEqual(evaluate("5 4 6 5 8 2 + + + ++").status,30);
+}
+
+void test_evaluate_evals_the_result_of_postfix_operation_for_multi_digit_operands (){
+	assertEqual(evaluate("20 4 *").status,80);
+	assertEqual(evaluate("20000 400 +").status,20400);
+}
+
+void test_evaluate_evals_the_result_of_postfix_operation_when_operators_are_between_numbers (){
+	assertEqual(evaluate("2 4 * 2 +").status,10);
+	assert(evaluate("2 2 2 * 2 - 3 + +  == 7").status);
+	assert(evaluate("2 2 2 2 2 * * 2 + + 2 - * == 20").status);
+	assertEqual(evaluate("2 2 - 2 2 2 * 2 - - -").status,0);
+}

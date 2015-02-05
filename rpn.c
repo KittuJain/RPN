@@ -90,13 +90,14 @@ LinkedList* populateListWithToken (STRING expression){
 	return list;
 }
 
-int evaluate (STRING expression){
+Result evaluate (STRING expression){
 	Stack stack = createStack();
 	Token *token;
-	int *value, *result, num1, num2;
+	int *value, *calculatedResult, num1, num2;
 	char symbol;
 	LinkedList *list = populateListWithToken(expression);
 	Node_ptr walker = list->head;
+	Result result = {0,0};
 
 	while(walker != NULL){
 		token = ((Token*)(walker->data));
@@ -109,13 +110,14 @@ int evaluate (STRING expression){
 		}
 		if(token->type == 2){
 			symbol = getSymbol(expression, token->start_point);
-			result = (int*)calloc(INT_SIZE, 1);
+			calculatedResult = (int*)calloc(INT_SIZE, 1);
 			num1 = *(int*)pop(&stack);
 			num2 = *(int*)pop(&stack);
-			*result = operate(num1,num2, symbol);
-			push(&stack, result);
+			*calculatedResult = operate(num1,num2, symbol);
+			push(&stack, calculatedResult);
 		}
 		walker = walker->next;
 	}
-	return *(int*)pop(&stack);
+	result.status = *(int*)pop(&stack);
+	return result;
 }
