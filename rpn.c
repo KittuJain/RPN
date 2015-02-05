@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 int isOperator(char symbol){
 	if(symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/')
 		return 1;
@@ -33,7 +32,7 @@ int toInteger (STRING expression){
 STRING getValue (STRING expression, int start, int end, Token *token){
 	int i, count = 0 ;
 	STRING value;
-	value = malloc( sizeof(char)* (token->end_point - token->start_point));
+	value = malloc(STRING_SIZE * (token->end_point - token->start_point));
 	for(i = start; i <= end; i++){
 		value[count] = expression[i];
 		count++;
@@ -65,7 +64,7 @@ Token* createToken(int type,int start,int end){
 }
 
 LinkedList* populateListWithToken (STRING expression){
-	int count,length,start,type;
+	int count, length, start, type;
 	LinkedList* list = calloc(1,sizeof(LinkedList));
 	Node_ptr* tokenNode;
 	Token* token;
@@ -79,14 +78,12 @@ LinkedList* populateListWithToken (STRING expression){
 			start = count;
 			while(isOperand(expression[count+1]))
 				count++;
-
 			token = createToken(1,start,count);
 		}
-
 		else
 			token = createToken(3,count,count);
 
-		tokenNode = malloc(sizeof(Node_ptr));
+		tokenNode = calloc(sizeof(Node_ptr),1);
 		*tokenNode = create_node(token);
 		add_to_list(list,*tokenNode);
 	}
@@ -96,7 +93,7 @@ LinkedList* populateListWithToken (STRING expression){
 int evaluate (STRING expression){
 	Stack stack = createStack();
 	Token *token;
-	int value, *result, num1, num2;
+	int *value, *result, num1, num2;
 	char symbol;
 	LinkedList *list = populateListWithToken(expression);
 	Node_ptr walker = list->head;
@@ -105,8 +102,10 @@ int evaluate (STRING expression){
 		token = ((Token*)(walker->data));
 
 		if(token -> type == 1){
-			value = toInteger(getValue(expression, token->start_point, token->end_point,token));
-			push(&stack, &value);
+			value = malloc(INT_SIZE);
+			*value = toInteger(getValue(expression, token->start_point, token->end_point, token));
+			push(&stack, value);
+
 		}
 		if(token->type == 2){
 			symbol = getSymbol(expression, token->start_point);
@@ -119,5 +118,4 @@ int evaluate (STRING expression){
 		walker = walker->next;
 	}
 	return *(int*)pop(&stack);
-
 }

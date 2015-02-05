@@ -65,14 +65,56 @@ void test_populateListWithToken_gives_the_linked_list_of_tokens_in_the_given_str
 	assertEqual(((Token*)list->tail->data)->type,2);
 }
 
+void test_getValue_gets_the_value_between_two_points (){
+	STRING expression = "2 3 +";
+	Token *token = createToken(1, 0, 0);
+	assertEqual(strcmp(getValue(expression, 0, 0, token), "2"),0);
+}
+
 void test_evaluate_evals_the_result_of_1_1_sum_as_2 (){
-	String expression = calloc(sizeof(String),1);
+	String expression = calloc(STRING_SIZE,1);
 	strcpy(expression,"1 1 +");
 	assertEqual(evaluate(expression), 2);
 }
 
 void test_evaluate_evals_the_result_of_3_3_sum_as_6 (){
-	String expression = calloc(sizeof(String),1);
+	String expression = calloc(STRING_SIZE,1);
 	strcpy(expression,"3 3 +");
 	assertEqual(evaluate(expression), 6);
 }
+
+void test_evaluate_evals_the_result_of_3_2_sum_as_5 (){
+	String expression = calloc(STRING_SIZE,1);
+	strcpy(expression,"3 2 +");
+	assertEqual(evaluate(expression), 5);
+}
+
+void test_evaluate_evals_the_result_of_2_3_sum_as_5 (){
+	String expression = calloc(STRING_SIZE,1);
+	strcpy(expression,"2 3 +");
+	assertEqual(evaluate(expression), 5);
+}
+
+void test_evaluate_evals_the_result_of_difference_between_2_3_as_minus_1 (){
+	String expression = calloc(STRING_SIZE,1);
+	strcpy(expression,"2 3 -");
+	assertEqual(evaluate(expression), -1);
+}
+
+void test_evaluate_evals_the_result_of_product_of_2_3_as_6 (){
+	String expression = calloc(STRING_SIZE,1);
+	strcpy(expression,"2 3 *");
+	assertEqual(evaluate(expression), 6);
+}
+void test_evaluate_evals_the_result_of_division_of_2_3_as_0 (){
+	String expression = calloc(STRING_SIZE,1);
+	strcpy(expression,"2 3 /");
+	assertEqual(evaluate(expression), 0);
+}
+
+void test_evaluate_evals_the_result_of_2_3_4_sum_diff_as_minus_5 (){
+	String expression = calloc(STRING_SIZE,1);
+	strcpy(expression,"2 3 4 + -");
+	assertEqual(evaluate(expression), -5);
+}
+
