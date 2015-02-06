@@ -65,17 +65,38 @@ void test_populateListWithToken_gives_the_linked_list_of_tokens_in_the_given_str
 	assertEqual(((Token*)list->tail->data)->type,2);
 }
 
+void test_populateListWithToken_gives_the_linked_list_of_tokens_of_long_string(){
+	LinkedList *list;
+	list = populateListWithToken("2 3 4 + -");
+	assertEqual(list->count,9);
+	assertEqual(((Token*)list->head->data)->type,1);
+	assertEqual(((Token*)list->tail->data)->type,2);
+}
+
 void test_getValue_gets_the_value_between_two_points (){
 	STRING expression = "2 3 +";
 	Token *token = createToken(1, 0, 0);
 	assertEqual(strcmp(getValue(expression, 0, 0, token), "2"),0);
 }
 
-void test_generateResult_generates_the_result_of_the_expression (){
+void test_getValue_gets_the_value_between_given_two_points (){
+	STRING expression = "2 30 +";
+	Token *token = createToken(1, 2, 3);
+	assertEqual(strcmp(getValue(expression, 2, 3, token), "30"),0);
+}
+
+void test_generateResult_generates_the_result_of_the_expression_of_sum_of_1_1 (){
 	Token *token;
 	LinkedList *list = populateListWithToken("1 1 +");
 	Stack stack = createStack();
 	assertEqual(generateResult(list, stack, "1 1 +", token).status,2);
+}
+
+void test_generateResult_generates_the_result_of_long_expressions_also (){
+	Token *token;
+	LinkedList *list = populateListWithToken("5 4 6 5 8 2 + + + + +");
+	Stack stack = createStack();
+	assertEqual(generateResult(list, stack, "5 4 6 5 8 2 + + + + +", token).status,30);
 }
 
 void test_evaluate_evals_the_result_of_1_1_sum_as_2 (){
