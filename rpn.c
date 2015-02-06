@@ -87,8 +87,9 @@ LinkedList* populateListWithToken (STRING expression){
 	return list;
 }
 
-Result generateResult (Node_ptr walker, Stack stack, STRING expression, Token *token){
+Result generateResult (LinkedList *list, Stack stack, STRING expression, Token *token){
 	int *value, *calculatedResult;
+	Node_ptr walker = list->head;
 	char symbol;
 	Result result = {0,0};
 	while(walker != NULL){
@@ -109,6 +110,7 @@ Result generateResult (Node_ptr walker, Stack stack, STRING expression, Token *t
 
 		walker = walker->next;
 	}
+	result.status = *(int*)pop(&stack);
 	return result;
 }
 
@@ -116,8 +118,6 @@ Result evaluate (STRING expression){
 	Token *token;
 	Stack stack = createStack();
 	LinkedList *list = populateListWithToken(expression);
-	Node_ptr walker = list->head;
-	Result result = generateResult(walker, stack, expression, token);
-	result.status = *(int*)pop(&stack);
+	Result result = generateResult(list, stack, expression, token);
 	return result;
 }

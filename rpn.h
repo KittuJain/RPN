@@ -15,7 +15,8 @@ STRING getValue(STRING, int, int, Token*);
 char getSymbol (STRING, int);
 Token* createToken(int, int, int);
 LinkedList* populateListWithToken (STRING);
-Result generateResult (Node_ptr, Stack, STRING, Token*);
+Result generateResult (LinkedList*, Stack, STRING, Token*);
+STRING infixToPostfix(STRING);
 
 struct token{
 	int type;

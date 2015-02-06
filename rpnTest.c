@@ -71,6 +71,16 @@ void test_getValue_gets_the_value_between_two_points (){
 	assertEqual(strcmp(getValue(expression, 0, 0, token), "2"),0);
 }
 
+void test_generateResult_generates_the_result_of_the_expression (){
+	Token *token;
+	LinkedList *list;
+	Stack stack = createStack();
+	String expression = calloc(STRING_SIZE,1);
+	strcpy(expression,"1 1 +");
+	list = populateListWithToken(expression);
+	assertEqual(generateResult(list, stack, expression, token).status,2);
+}
+
 void test_evaluate_evals_the_result_of_1_1_sum_as_2 (){
 	String expression = calloc(STRING_SIZE,1);
 	strcpy(expression,"1 1 +");
@@ -123,20 +133,38 @@ void test_evaluate_works_fine_with_operators_not_separated_by_spaces (){
 	assertEqual(evaluate("5 4 3+-").status,-2);
 }
 
-void test_evaluate_evals_the_result_of_postfix_operation_for_multiple_operators (){
+void test_evaluate_evals_the_result_of_2_4_6_sum_mul_as_20 (){
 	assertEqual(evaluate("2 4 6 + *").status,20);
+}
+
+void test_evaluate_evals_the_result_of_5_4_6_5_sum_sum_minus_as_minus_10 (){
 	assertEqual(evaluate("5 4 6 5 + + -").status,-10);
+}
+
+void test_evaluate_evals_the_result_of_5_4_6_5_8_2_sum_sum_sum_sum_sum_as_30 (){
 	assertEqual(evaluate("5 4 6 5 8 2 + + + + +").status,30);
 }
 
-void test_evaluate_evals_the_result_of_postfix_operation_for_multi_digit_operands (){
+void test_evaluate_evals_the_result_of_20_4_mul_as_80 (){
 	assertEqual(evaluate("20 4 *").status,80);
+}
+
+void test_evaluate_evals_the_result_of_20000_400_sum_as_20400 (){
 	assertEqual(evaluate("20000 400 +").status,20400);
 }
 
-void test_evaluate_evals_the_result_of_postfix_operation_when_operators_are_between_operands (){
+void test_evaluate_evals_the_result_of_2_4_mul_2_sum_as_10 (){
 	assertEqual(evaluate("2 4 * 2 +").status,10);
+}
+
+void test_evaluate_evals_the_result_of_2_2_2_mul_2_minus_3_sum_sum_as_7 (){
 	assertEqual(evaluate("2 2 2 * 2 - 3 + +").status, 7);
+}
+
+void test_evaluate_evals_the_result_of_2_2_2_2_2_mul_mul_2_sum_sum_2_minus_mul_as_20(){
 	assertEqual(evaluate("2 2 2 2 2 * * 2 + + 2 - *").status,20);
+}
+
+void test_evaluate_evals_the_result_of_2_2_minus_2_2_2_mul_2_minus_minus_minus_as_0 (){
 	assertEqual(evaluate("2 2 - 2 2 2 * 2 - - -").status,0);
 }
