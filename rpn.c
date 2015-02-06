@@ -87,7 +87,7 @@ LinkedList* populateListWithToken (STRING expression){
 	return list;
 }
 
-void pushValuesAndPopResult (Token *token, STRING expression, Stack stack){
+void pushValuesAndCalculateResult (Token *token, STRING expression, Stack stack){
 	int *value, *calculatedResult;
 	char symbol;
 	if(token -> type == 1){
@@ -109,7 +109,7 @@ Result generateResult (LinkedList *list, Stack stack, STRING expression, Token *
 	Result result = {0,0};
 	while(walker != NULL){
 		token = ((Token*)(walker->data));
-		pushValuesAndPopResult (token, expression, stack);
+		pushValuesAndCalculateResult(token, expression, stack);
 		walker = walker->next;
 	}
 	result.status = *(int*)pop(&stack);

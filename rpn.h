@@ -16,8 +16,7 @@ char getSymbol (STRING, int);
 Token* createToken(int, int, int);
 LinkedList* populateListWithToken (STRING);
 Result generateResult (LinkedList*, Stack, STRING, Token*);
-STRING infixToPostfix(STRING);
-
+void pushValuesAndCalculateResult (Token *, STRING, Stack);
 struct token{
 	int type;
 	int start_point;
