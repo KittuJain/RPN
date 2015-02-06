@@ -73,12 +73,9 @@ void test_getValue_gets_the_value_between_two_points (){
 
 void test_generateResult_generates_the_result_of_the_expression (){
 	Token *token;
-	LinkedList *list;
+	LinkedList *list = populateListWithToken("1 1 +");
 	Stack stack = createStack();
-	String expression = calloc(STRING_SIZE,1);
-	strcpy(expression,"1 1 +");
-	list = populateListWithToken(expression);
-	assertEqual(generateResult(list, stack, expression, token).status,2);
+	assertEqual(generateResult(list, stack, "1 1 +", token).status,2);
 }
 
 void test_evaluate_evals_the_result_of_1_1_sum_as_2 (){

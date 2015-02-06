@@ -87,15 +87,10 @@ LinkedList* populateListWithToken (STRING expression){
 	return list;
 }
 
-Result generateResult (LinkedList *list, Stack stack, STRING expression, Token *token){
+void pushValuesAndPopResult (Token *token, STRING expression, Stack stack){
 	int *value, *calculatedResult;
-	Node_ptr walker = list->head;
 	char symbol;
-	Result result = {0,0};
-	while(walker != NULL){
-		token = ((Token*)(walker->data));
-
-		if(token -> type == 1){
+	if(token -> type == 1){
 			value = malloc(INT_SIZE);
 			*value = toInteger(getValue(expression, token->start_point, token->end_point, token));
 			push(&stack, value);
@@ -107,7 +102,14 @@ Result generateResult (LinkedList *list, Stack stack, STRING expression, Token *
 			*calculatedResult = operate(*(int*)pop(&stack), *(int*)pop(&stack), symbol);
 			push(&stack, calculatedResult);
 		}
+}
 
+Result generateResult (LinkedList *list, Stack stack, STRING expression, Token *token){
+	Node_ptr walker = list->head;
+	Result result = {0,0};
+	while(walker != NULL){
+		token = ((Token*)(walker->data));
+		pushValuesAndPopResult (token, expression, stack);
 		walker = walker->next;
 	}
 	result.status = *(int*)pop(&stack);
@@ -118,6 +120,5 @@ Result evaluate (STRING expression){
 	Token *token;
 	Stack stack = createStack();
 	LinkedList *list = populateListWithToken(expression);
-	Result result = generateResult(list, stack, expression, token);
-	return result;
+	return generateResult(list, stack, expression, token);
 }
