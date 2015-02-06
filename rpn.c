@@ -95,17 +95,17 @@ void pushValuesAndCalculateResult (Token *token, STRING expression, Stack stack)
 	int *value, *calculatedResult;
 	char symbol;
 	if(token -> type == 1){
-			value = malloc(INT_SIZE);
-			*value = toInteger(getValue(expression, token->start_point, token->end_point, token));
-			push(&stack, value);
-		}
+		value = malloc(INT_SIZE);
+		*value = toInteger(getValue(expression, token->start_point, token->end_point, token));
+		push(&stack, value);
+	}
 
-		if(token -> type == 2){
-			symbol = getSymbol(expression, token->start_point);
-			calculatedResult = (int*)calloc(INT_SIZE, 1);
-			*calculatedResult = operate(*(int*)pop(&stack), *(int*)pop(&stack), symbol);
-			push(&stack, calculatedResult);
-		}
+	if(token -> type == 2){
+		symbol = getSymbol(expression, token->start_point);
+		calculatedResult = (int*)calloc(INT_SIZE, 1);
+		*calculatedResult = operate(*(int*)pop(&stack), *(int*)pop(&stack), symbol);
+		push(&stack, calculatedResult);
+	}
 }
 
 Result generateResult (LinkedList *list, Stack stack, STRING expression, Token *token){
