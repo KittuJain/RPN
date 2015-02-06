@@ -80,9 +80,9 @@ LinkedList* populateListWithToken (STRING expression){
 				count++;
 			token = createToken(1,start,count);
 		}
-		else if(isOperator(expression[count]))
+		if(isOperator(expression[count]))
 			token = createToken(2,count,count);
-		else
+		if(isSpace(expression[count]))
 			token = createToken(3,count,count);
 		tokenNode = calloc(sizeof(Node_ptr),1);
 		*tokenNode = create_node(token);

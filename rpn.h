@@ -17,6 +17,7 @@ Token* createToken(int, int, int);
 LinkedList* populateListWithToken (STRING);
 Result generateResult (LinkedList*, Stack, STRING, Token*);
 void pushValuesAndCalculateResult (Token *, STRING, Stack);
+
 struct token{
 	int type;
 	int start_point;
