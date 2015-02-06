@@ -4,7 +4,14 @@
 #include <string.h>
 
 int isOperator(char symbol){
-	return (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/') ? 1 : 0;
+	STRING operators = "+-*/\0";
+	int i = 0;
+	while(operators[i] != '\0'){
+		if(operators[i] == symbol)
+			return 1;
+		i++;
+	}
+	return 0;
 }
 
 int isOperand (char number){
@@ -67,19 +74,16 @@ LinkedList* populateListWithToken (STRING expression){
 
 	for(count = 0, length = strlen(expression) ; count < length ; count++){
 
-		if(isOperator(expression[count]))
-			token = createToken(2,count,count);
-
-		else if(isOperand(expression[count])){
+		if(isOperand(expression[count])){
 			start = count;
 			while(isOperand(expression[count+1]))
 				count++;
 			token = createToken(1,start,count);
 		}
-
+		else if(isOperator(expression[count]))
+			token = createToken(2,count,count);
 		else
 			token = createToken(3,count,count);
-
 		tokenNode = calloc(sizeof(Node_ptr),1);
 		*tokenNode = create_node(token);
 		add_to_list(list,*tokenNode);
@@ -118,7 +122,6 @@ Result generateResult (LinkedList *list, Stack stack, STRING expression, Token *
 
 Result evaluate (STRING expression){
 	Token *token;
-	Stack stack = createStack();
 	LinkedList *list = populateListWithToken(expression);
-	return generateResult(list, stack, expression, token);
+	return generateResult(list, createStack(), expression, token);
 }
