@@ -16,7 +16,7 @@ char getSymbol (STRING, int);
 Token* createToken(int, int, int);
 LinkedList* populateListWithToken (STRING);
 Result generateResult (LinkedList*, Stack, STRING, Token*);
-void pushValuesAndCalculateResult (Token *, STRING, Stack);
+Result pushValuesAndCalculateResult (Token *, STRING, Stack, Result);
 
 struct token{
 	int type;

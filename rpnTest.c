@@ -186,3 +186,15 @@ void test_evaluate_evals_the_result_of_2_2_2_2_2_mul_mul_2_sum_sum_2_minus_mul_a
 void test_evaluate_evals_the_result_of_2_2_minus_2_2_2_mul_2_minus_minus_minus_as_0 (){
 	assertEqual(evaluate("2 2 - 2 2 2 * 2 - - -").status,0);
 }
+
+void test_evaluate_returns_1_when_there_are_less_operands (){
+	assertEqual(evaluate("2 -").error,1);
+}
+
+void test_evaluate_returns_1_when_there_are_more_operators (){
+	assertEqual(evaluate("2 - +").error,1);
+}
+
+void test_evaluate_returns_0_for_fair_calculation (){
+	assertEqual(evaluate("2 2 +").error,0);
+}
