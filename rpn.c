@@ -6,6 +6,7 @@
 int isOperator(char symbol){
 	STRING operators = "+-*/\0";
 	int i = 0;
+	
 	while(operators[i] != '\0'){
 		if(operators[i] == symbol)
 			return 1;
@@ -112,9 +113,7 @@ void popValuesAndCalculateResult (Stack stack, Token *token, STRING expression){
 Result generateResult (LinkedList *list, Stack stack, STRING expression, Token *token){
 	Node_ptr walker = list->head;
 	Result result = {0,0};
-	int *calculatedResult;
 	int operatorCount = 0, operandCount = 0;
-	char symbol;
 	while(walker != NULL){
 		token = ((Token*)(walker->data));
 		if(token -> type == 1){
