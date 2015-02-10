@@ -32,7 +32,7 @@ int toInteger (STRING expression){
 	return number;
 }
 
-STRING getValue (STRING expression, int start, int end, Token *token){
+STRING getValue (STRING expression, int start, int end, Token_ptr token){
 	int i = start, count = 0 ;
 	STRING value;
 	value = malloc(STRING_SIZE * (token->end_point - token->start_point));
@@ -58,8 +58,8 @@ int operate(int num1, int num2, char operator){
 	}
 }
 
-Token* createToken(int type,int start,int end){
-	Token* token;
+Token_ptr createToken(int type,int start,int end){
+	Token_ptr token;
 	token = malloc(sizeof(Token));
 	token->type = type;
 	token->start_point = start;
@@ -71,7 +71,7 @@ LinkedList* populateListWithToken (STRING expression){
 	int count, length, start, type;
 	LinkedList* list = calloc(1,sizeof(LinkedList));
 	Node_ptr* tokenNode;
-	Token* token;
+	Token_ptr token;
 
 	for(count = 0, length = strlen(expression) ; count < length ; count++){
 
@@ -94,14 +94,14 @@ LinkedList* populateListWithToken (STRING expression){
 	return list;
 }
 
-void pushValues (Stack stack, STRING expression, Token *token){
+void pushValues (Stack stack, STRING expression, Token_ptr token){
 	int *value;
 	value = malloc(INT_SIZE);
 	*value = toInteger(getValue(expression, token->start_point, token->end_point, token));
 	push(&stack, value);
 }
 
-void popValuesAndCalculateResult (Stack stack, Token *token, STRING expression){
+void popValuesAndCalculateResult (Stack stack, Token_ptr token, STRING expression){
 	char symbol;
 	int *calculatedResult;
 	symbol = getSymbol(expression, token->start_point);
@@ -110,12 +110,12 @@ void popValuesAndCalculateResult (Stack stack, Token *token, STRING expression){
 	push(&stack, calculatedResult);
 }
 
-Result generateResult (LinkedList *list, Stack stack, STRING expression, Token *token){
+Result generateResult (LinkedList *list, Stack stack, STRING expression, Token_ptr token){
 	Node_ptr walker = list->head;
 	Result result = {0,0};
 	int operatorCount = 0, operandCount = 0;
 	while(walker != NULL){
-		token = ((Token*)(walker->data));
+		token = ((Token_ptr)(walker->data));
 		if(token -> type == 1){
 			pushValues(stack, expression, token);
 			operandCount ++;
@@ -133,7 +133,43 @@ Result generateResult (LinkedList *list, Stack stack, STRING expression, Token *
 }
 
 Result evaluate (STRING expression){
-	Token *token;
+	Token_ptr token;
 	LinkedList *list = populateListWithToken(expression);
 	return generateResult(list, createStack(), expression, token);
+}
+
+STRING infixToPostfix(STRING expression){
+	STRING operator;
+	int counter = 0, expression_length = strlen(expression), *operand;
+	Stack operators = createStack();
+	Queue operands= createQueue();
+	STRING postfix_expression = malloc(CHAR_SIZE*(expression_length+1));
+
+	while(counter < expression_length){
+
+		if(isOperand(expression[counter])){
+			operand = malloc(INT_SIZE);
+			*operand = atoi(&expression[counter]);
+			enqueue(&operands,operand);
+		}
+		if(isOperator(expression[counter])){
+			operator = malloc(CHAR_SIZE);
+			*operator = expression[counter];
+			push(&operators,operator);
+		}
+		counter++;
+	}
+
+	counter = 0;
+	while(operands.list->count != 0){
+		postfix_expression[counter++] = '0' + *(int*)dequeue(&operands);
+		postfix_expression[counter++] = ' ';
+	}
+
+	while(operators.list->count != 0){
+		postfix_expression[counter++] = *(char*)pop(&operators);
+		if(operators.list->count > 1)
+			postfix_expression[counter+1] = ' ';
+	}
+	return postfix_expression;
 }
