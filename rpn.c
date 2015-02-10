@@ -168,8 +168,8 @@ STRING infixToPostfix(STRING expression){
 
 	while(operators.list->count != 0){
 		postfix_expression[counter++] = *(char*)pop(&operators);
-		if(operators.list->count > 1)
-			postfix_expression[counter+1] = ' ';
+		if(operators.list->count >= 1)
+			postfix_expression[counter++] = ' ';
 	}
 	return postfix_expression;
 }

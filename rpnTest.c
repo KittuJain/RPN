@@ -210,3 +210,9 @@ void test_infixToPostfix_converts_an_infix_expression_to_postfix_for_mul_operati
 	strcpy(expression,"2 4 *");
 	assertEqual(strcmp(infixToPostfix("2 * 4"),expression),0);
 }
+
+void test_infixToPostfix_converts_an_infix_expression_to_postfix_for_complex_operation (){
+	STRING expression = calloc(STRING_SIZE,1);
+	strcpy(expression,"2 4 2 + *");
+	assertEqual(strcmp(infixToPostfix("2 * 4 + 2"),expression),0);
+}
