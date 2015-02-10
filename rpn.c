@@ -140,11 +140,11 @@ Result evaluate (STRING expression){
 
 STRING infixToPostfix(STRING expression){
 	STRING operator;
-	int counter = 0, expression_length = strlen(expression), *operand;
+	Token_ptr token;
 	Stack operators = createStack();
 	Queue operands= createQueue();
+	int counter = 0, expression_length = strlen(expression), *operand;
 	STRING postfix_expression = malloc(CHAR_SIZE*(expression_length+1));
-	Token_ptr token;
 	LinkedList *list = populateListWithToken(expression);
 	Node_ptr walker = list->head;
 
@@ -164,7 +164,6 @@ STRING infixToPostfix(STRING expression){
 		walker = walker->next;
 	}
 
-	counter = 0;
 	while(operands.list->count != 0){
 		postfix_expression[counter++] = '0' + *(int*)dequeue(&operands);
 		postfix_expression[counter++] = ' ';
