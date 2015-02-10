@@ -144,20 +144,24 @@ STRING infixToPostfix(STRING expression){
 	Stack operators = createStack();
 	Queue operands= createQueue();
 	STRING postfix_expression = malloc(CHAR_SIZE*(expression_length+1));
+	Token_ptr token;
+	LinkedList *list = populateListWithToken(expression);
+	Node_ptr walker = list->head;
 
-	while(counter < expression_length){
-
-		if(isOperand(expression[counter])){
+	while(walker != NULL){
+		token = ((Token_ptr)(walker->data));
+		if(token -> type == 1){
 			operand = malloc(INT_SIZE);
-			*operand = atoi(&expression[counter]);
+			*operand = toInteger(getValue(expression, token->start_point, token->end_point, token));
 			enqueue(&operands,operand);
 		}
-		if(isOperator(expression[counter])){
+
+		if(token -> type == 2){
 			operator = malloc(CHAR_SIZE);
-			*operator = expression[counter];
+			*operator = getSymbol(expression, token->start_point);
 			push(&operators,operator);
 		}
-		counter++;
+		walker = walker->next;
 	}
 
 	counter = 0;
