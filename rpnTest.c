@@ -216,3 +216,9 @@ void test_infixToPostfix_converts_an_infix_expression_to_postfix_for_complex_ope
 	strcpy(expression,"2 4 2 + *");
 	assertEqual(strcmp(infixToPostfix("2 * 4 + 2"),expression),0);
 }
+
+void test_infixToPostfix_converts_an_infix_expression_to_postfix_for_mul_operation_on_twoDigit_nums (){
+	STRING expression = calloc(STRING_SIZE,1);
+	strcpy(expression,"20 4 *");
+	assertEqual(strcmp(infixToPostfix("20 * 4"),expression),0);
+}

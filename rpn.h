@@ -22,6 +22,7 @@ Result generateResult (LinkedList*, Stack, STRING, Token*);
 void pushValues (Stack, STRING, Token*);
 void popValuesAndCalculateResult (Stack, Token*, STRING);
 STRING infixToPostfix(STRING expression);
+void populateStackAndQueue (LinkedList*, Token_ptr, STRING, Queue, Stack);
 
 struct token{
 	int type;

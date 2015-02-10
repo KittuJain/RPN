@@ -138,24 +138,17 @@ Result evaluate (STRING expression){
 	return generateResult(list, createStack(), expression, token);
 }
 
-STRING infixToPostfix(STRING expression){
+void populateStackAndQueue (LinkedList *list, Token_ptr token, STRING expression, Queue operands, Stack operators){
 	STRING operator;
-	Token_ptr token;
-	Stack operators = createStack();
-	Queue operands= createQueue();
-	int counter = 0, expression_length = strlen(expression), *operand;
-	STRING postfix_expression = malloc(CHAR_SIZE*(expression_length+1));
-	LinkedList *list = populateListWithToken(expression);
+	STRING operand;
 	Node_ptr walker = list->head;
-
 	while(walker != NULL){
 		token = ((Token_ptr)(walker->data));
 		if(token -> type == 1){
-			operand = malloc(INT_SIZE);
-			*operand = toInteger(getValue(expression, token->start_point, token->end_point, token));
+			operand = malloc(CHAR_SIZE);
+			operand = (getValue(expression, token->start_point, token->end_point, token));
 			enqueue(&operands,operand);
 		}
-
 		if(token -> type == 2){
 			operator = malloc(CHAR_SIZE);
 			*operator = getSymbol(expression, token->start_point);
@@ -163,16 +156,25 @@ STRING infixToPostfix(STRING expression){
 		}
 		walker = walker->next;
 	}
+}
+
+STRING infixToPostfix(STRING expression){
+	Token_ptr token;
+	int counter = 0;
+	Stack operators = createStack();
+	Queue operands= createQueue();
+	STRING postfix_expression = malloc(CHAR_SIZE*(strlen(expression)+1));
+	LinkedList *list = populateListWithToken(expression);
+	populateStackAndQueue(list, token, expression, operands, operators);
 
 	while(operands.list->count != 0){
-		postfix_expression[counter++] = '0' + *(int*)dequeue(&operands);
-		postfix_expression[counter++] = ' ';
+		strcat(postfix_expression,(STRING)dequeue(&operands));
+		strcat(postfix_expression," ");
 	}
-
 	while(operators.list->count != 0){
-		postfix_expression[counter++] = *(char*)pop(&operators);
+		strcat(postfix_expression,(char*)pop(&operators));
 		if(operators.list->count >= 1)
-			postfix_expression[counter++] = ' ';
+			strcat(postfix_expression," ");
 	}
 	return postfix_expression;
 }
