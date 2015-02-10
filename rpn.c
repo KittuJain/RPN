@@ -114,13 +114,14 @@ Result generateResult (LinkedList *list, Stack stack, STRING expression, Token_p
 	Node_ptr walker = list->head;
 	Result result = {0,0};
 	int operatorCount = 0, operandCount = 0;
+
 	while(walker != NULL){
 		token = ((Token_ptr)(walker->data));
+
 		if(token -> type == 1){
 			pushValues(stack, expression, token);
 			operandCount ++;
 		}
-
 		if(token -> type == 2){
 			if(stack.list->count <= 1) return (Result){1,0};
 			popValuesAndCalculateResult(stack, token, expression);
@@ -172,7 +173,7 @@ STRING infixToPostfix(STRING expression){
 		strcat(postfix_expression," ");
 	}
 	while(operators.list->count != 0){
-		strcat(postfix_expression,(char*)pop(&operators));
+		strcat(postfix_expression,(STRING)pop(&operators));
 		if(operators.list->count >= 1)
 			strcat(postfix_expression," ");
 	}
