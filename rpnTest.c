@@ -199,6 +199,28 @@ void test_evaluate_returns_0_for_fair_calculation (){
 	assertEqual(evaluate("2 2 +").error,0);
 }
 
+void test_getPrecedence_gets_precedence_of_an_operator (){
+	assertEqual(getPrecedence("+"),2);
+	assertEqual(getPrecedence("-"),2);
+	assertEqual(getPrecedence("*"),3);
+	assertEqual(getPrecedence("/"),3);
+}
+
+void test_stringifyQueue_stringifies_the_elements_of_queue (){
+	Queue operands = createQueue();
+	enqueue(&operands, (void*)"2");
+	enqueue(&operands, (void*)"3");
+	enqueue(&operands, (void*)"+");
+	assertEqual(strcmp(stringifyQueue(operands, "2 + 3"), "2 3 +"),0);
+}
+
+void test_newPrecedenceGreater_returns_true_when_operator_greater (){
+	STRING operator = "*";
+	Stack operators = createStack();
+	push(&operators, (void*)"+");
+	assertEqual(newPrecedenceGreater(operator, operators),1);
+}
+
 void test_infixToPostfix_converts_an_infix_expression_to_postfix (){
 	STRING expression = calloc(STRING_SIZE,1);
 	strcpy(expression,"1 1 +");
@@ -209,12 +231,6 @@ void test_infixToPostfix_converts_an_infix_expression_to_postfix_for_mul_operati
 	STRING expression = calloc(STRING_SIZE,1);
 	strcpy(expression,"2 4 *");
 	assertEqual(strcmp(infixToPostfix("2 * 4"),expression),0);
-}
-
-void test_infixToPostfix_converts_an_infix_expression_to_postfix_for_complex_operation (){
-	STRING expression = calloc(STRING_SIZE,1);
-	strcpy(expression,"2 4 2 + *");
-	assertEqual(strcmp(infixToPostfix("2 * 4 + 2"),expression),0);
 }
 
 void test_infixToPostfix_converts_an_infix_expression_to_postfix_for_mul_operation_on_twoDigit_nums (){
@@ -235,3 +251,8 @@ void test_infixToPostfix_converts_an_infix_expression_to_postfix_for_minus_opera
 	assertEqual(strcmp(infixToPostfix("2 - 2"),expression),0);
 }
 
+void test_infixToPostfix_converts_an_infix_expression_to_postfix_for_complex_operation (){
+	STRING expression = calloc(STRING_SIZE,1);
+	strcpy(expression,"2 4 * 2 +");
+	assertEqual(strcmp(infixToPostfix("2 * 4 + 2"),expression),0);
+}

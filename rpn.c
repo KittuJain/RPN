@@ -143,39 +143,65 @@ void populateStackAndQueue (LinkedList *list, Token_ptr token, STRING expression
 	STRING operator;
 	STRING operand;
 	Node_ptr walker = list->head;
+
 	while(walker != NULL){
 		token = ((Token_ptr)(walker->data));
 		if(token -> type == 1){
 			operand = malloc(CHAR_SIZE);
-			operand = (getValue(expression, token->start_point, token->end_point, token));
+			operand = getValue(expression, token->start_point, token->end_point, token);
 			enqueue(&operands,operand);
 		}
+
 		if(token -> type == 2){
 			operator = malloc(CHAR_SIZE);
 			*operator = getSymbol(expression, token->start_point);
-			push(&operators,operator);
+			
+			if(operators.list->count == 0 || newPrecedenceGreater(operator,operators))
+				push(&operators,operator);
+
+			else{
+				enqueue(&operands, pop(&operators));
+				push(&operators, operator);
+			}
 		}
 		walker = walker->next;
 	}
 }
 
+int newPrecedenceGreater(STRING operator, Stack operators){
+	return (getPrecedence(operator) > getPrecedence(operators.top->data));
+}
+
 STRING infixToPostfix(STRING expression){
 	Token_ptr token;
-	int counter = 0;
 	Stack operators = createStack();
 	Queue operands= createQueue();
-	STRING postfix_expression = malloc(CHAR_SIZE*(strlen(expression)+1));
 	LinkedList *list = populateListWithToken(expression);
 	populateStackAndQueue(list, token, expression, operands, operators);
 
+	while(operators.list->count != 0){
+		enqueue(&operands, pop(&operators));
+	}
+	return stringifyQueue(operands, expression);
+}
+
+
+STRING stringifyQueue(Queue operands, STRING expression){
+	STRING postfix_expression = malloc(CHAR_SIZE*(strlen(expression)+1));
 	while(operands.list->count != 0){
 		strcat(postfix_expression,(STRING)dequeue(&operands));
-		strcat(postfix_expression," ");
-	}
-	while(operators.list->count != 0){
-		strcat(postfix_expression,(STRING)pop(&operators));
-		if(operators.list->count >= 1)
+		if(operands.list->count >= 1)
 			strcat(postfix_expression," ");
 	}
 	return postfix_expression;
+}
+
+int getPrecedence(STRING operator){
+	switch(*operator){
+		case '*':
+		case '/': return 3;
+		case '+':
+		case '-': return 2;
+	}
+	return 0;
 }

@@ -23,6 +23,10 @@ void pushValues (Stack, STRING, Token*);
 void popValuesAndCalculateResult (Stack, Token*, STRING);
 STRING infixToPostfix(STRING expression);
 void populateStackAndQueue (LinkedList*, Token_ptr, STRING, Queue, Stack);
+int getPrecedence(STRING);
+STRING stringifyQueue(Queue operands, STRING);
+int newPrecedenceGreater(STRING, Stack);
+
 
 struct token{
 	int type;
