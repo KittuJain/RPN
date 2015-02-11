@@ -16,11 +16,11 @@ int isOperator(char symbol){
 }
 
 int isOperand (char number){
-	return (number > 47 && number < 58) ? 1 : 0;
+	return (number > 47 && number < 58);
 }
 
 int isSpace (char ch){
-	return (ch == 32) ? 1 : 0;
+	return (ch == 32);
 }
 
 int toInteger (STRING expression){
@@ -139,6 +139,10 @@ Result evaluate (STRING expression){
 	return generateResult(list, createStack(), expression, token);
 }
 
+int newPrecedenceGreater(STRING operator, Stack operators){
+	return (getPrecedence(operator) > getPrecedence(operators.top->data));
+}
+
 void populateStackAndQueue (LinkedList *list, Token_ptr token, STRING expression, Queue operands, Stack operators){
 	STRING operator;
 	STRING operand;
@@ -156,8 +160,9 @@ void populateStackAndQueue (LinkedList *list, Token_ptr token, STRING expression
 			operator = malloc(CHAR_SIZE);
 			*operator = getSymbol(expression, token->start_point);
 			
-			if(operators.list->count == 0 || newPrecedenceGreater(operator,operators))
-				push(&operators,operator);
+			if(operators.list->count == 0 || newPrecedenceGreater(operator, operators)){
+				push(&operators,(void*)operator);
+			}
 
 			else{
 				enqueue(&operands, pop(&operators));
@@ -167,24 +172,6 @@ void populateStackAndQueue (LinkedList *list, Token_ptr token, STRING expression
 		walker = walker->next;
 	}
 }
-
-int newPrecedenceGreater(STRING operator, Stack operators){
-	return (getPrecedence(operator) > getPrecedence(operators.top->data));
-}
-
-STRING infixToPostfix(STRING expression){
-	Token_ptr token;
-	Stack operators = createStack();
-	Queue operands= createQueue();
-	LinkedList *list = populateListWithToken(expression);
-	populateStackAndQueue(list, token, expression, operands, operators);
-
-	while(operators.list->count != 0){
-		enqueue(&operands, pop(&operators));
-	}
-	return stringifyQueue(operands, expression);
-}
-
 
 STRING stringifyQueue(Queue operands, STRING expression){
 	STRING postfix_expression = malloc(CHAR_SIZE*(strlen(expression)+1));
@@ -198,10 +185,23 @@ STRING stringifyQueue(Queue operands, STRING expression){
 
 int getPrecedence(STRING operator){
 	switch(*operator){
-		case '*':
+		case '*':;
 		case '/': return 3;
-		case '+':
+		case '+':;
 		case '-': return 2;
 	}
 	return 0;
+}
+
+STRING infixToPostfix(STRING expression){
+	Token_ptr token;
+	Stack operators = createStack();
+	Queue operands= createQueue();
+	LinkedList *list = populateListWithToken(expression);
+	populateStackAndQueue(list, token, expression, operands, operators);
+
+	while(operators.list->count != 0){
+		enqueue(&operands, pop(&operators));
+	}
+	return stringifyQueue(operands, expression);
 }

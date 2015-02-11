@@ -12,7 +12,7 @@ Stack createStack(void){
 int push (Stack *stack, void* data){
 	Node_ptr node = create_node(data);
 	int count = add_to_list(stack->list,node);
-	stack->top = stack->list->head;
+	stack->top = node;
 	return (count < 0) ? -1 : stack->list->count;
 }
 

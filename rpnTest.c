@@ -256,3 +256,7 @@ void test_infixToPostfix_converts_an_infix_expression_to_postfix_for_complex_ope
 	strcpy(expression,"2 4 * 2 +");
 	assertEqual(strcmp(infixToPostfix("2 * 4 + 2"),expression),0);
 }
+
+void test_infixToPostfix_converts_an_infix_expression_to_postfix_for_complex_expressions (){
+	assertEqual(strcmp(infixToPostfix("3 + 4 * 2 / 1"),"3 4 2 * 1 / +"),0);
+}
